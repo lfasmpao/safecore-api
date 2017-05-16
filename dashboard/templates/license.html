@@ -1,0 +1,184 @@
+{% extends 'header.html' %}
+
+{% block body %}
+<body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden" xmlns="http://www.w3.org/1999/html">
+{% include 'sidebar.html' %}
+        <main class="main">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">Home</li>
+                <li class="breadcrumb-item active">Dashboard</li>
+            </ol>
+            <div class="container-fluid">
+                <div class="animated fadeIn">
+                    <div class="row">
+                        {% if user_info.privilage_level == 'normal' %}
+                            <div class="col-sm-6 col-lg-3">
+                            <div class="card card-inverse card-primary">
+                                <div class="card-block pb-0">
+                                    <h5>You have no subscription</h5>
+                                    <a href="{{ url_for('manage_license') }}" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> Buy Subscription</a>
+                                </div>
+                            </div>
+                        </div>
+                            <div class="col-sm-6 col-lg-3">
+                            <div class="card card-inverse card-primary">
+                                <div class="card-block pb-0">
+                                    <h5>View our list of reseller</h5>
+                                    <a href="{{ url_for('manage_license') }}" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> Click here!</a>
+                                </div>
+                            </div>
+                        </div>
+                            <div class="col-sm-6 col-lg-3">
+                            <div class="card card-inverse card-primary">
+                                <div class="card-block pb-0">
+                                    <h5>Our social media accounts!</h5>
+                                    <a href="http://www.facebook.com/safecorevpn" class="btn btn-sm btn-primary"><i class="fa fa-facebook-square"></i> Facebook</a>
+                                    <a href="http://www.twitter.com/safecorevpn" class="btn btn-sm btn-primary"><i class="fa fa-twitter-square"></i> Twitter</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card card-inverse card-primary">
+                                <div class="card-block pb-0">
+                                    <h4 class="mb-0">
+                                        {% if connection_status %}
+                                            Connected
+                                        {% else %}
+                                            Disconnected
+                                        {% endif %}
+                                    </h4>
+                                    <p>Connection Status</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card card-inverse card-info">
+                                <div class="card-block pb-0">
+
+                                    <h4 class="mb-0">
+                                        {% if current_user.premium_subscription_expiration <= 0 and current_user.vip_subscription_expiration <= 0 %}
+                                            No Subscription
+                                            {% else %}
+                                            Premium: {{ duration[0] }} {% if current_user.vip_subscription_expiration <= 0 %}{% else %}VIP: {{ duration[1] }}{% endif %}
+                                        {% endif %}
+                                        </h4>
+                                    <p>Account Expiration</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card card-inverse card-warning">
+                                <div class="card-block pb-0">
+                                    <h5 class="mb-0">100mb / 200mb</h5>
+                                    <p>Current Usage</p>
+                                </div>
+                            </div>
+                        </div>
+                                {% endif %}
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card card-inverse card-danger">
+                                <div class="card-block pb-0">
+                                    <h4 class="mb-0">2</h4>
+                                    <p>Servers Online</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <strong>Enter License Key</strong>
+                                </div>
+                                <div class="card-block">
+                                    <form action="{{ url_for('api.license_key_verify') }}" method="post">
+                                        {{ form.hidden_tag() }}
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <label for="trasaction_number">License Key</label>
+                                                {{ form.license_key(placeholder="00000-00000-00000-00000-00000", class="form-control ") }}
+                                            </div>
+                                        </div>
+                                            <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="trasaction_number">Sender Username</label>
+                                                {{ form.username(placeholder="Username", class="form-control") }}
+                                            </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <label for="type">License Type</label>
+                                            {{ form.category(class="form-control") }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> Submit</button>
+                                    <button type="reset" class="btn btn-sm btn-danger"><i class="fa fa-ban"></i> Reset</button>
+                                </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    Buy Licence Key
+                                </div>
+                                <div class="card-block">
+                                    <form action="{{ url_for('api.send_request') }}" method="post">
+                                         {{ form.hidden_tag() }}
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <label for="type">Duration</label>
+                                            {{ buy.qty(class="form-control") }}
+                                        </div>
+                                        <div class="col-sm-6">
+                                                <label for="type">Subscription Type</label>
+                                            {{ buy.category(class="form-control") }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> Submit</button>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header">
+                                    <strong>Current Status</strong>
+                                </div>
+                                <div class="card-block">
+                                    <p>Subscription Duration:{% if current_user.premium_subscription_expiration <= 0 and current_user.vip_subscription_expiration <= 0 %}
+                                        <b>No Subscription</b>
+                                        {% else %}
+                                        <p>
+                                        Premium: <strong>{{ format_date(current_user.premium_subscription_expiration) }}</strong></p>
+                                        <p>{% if current_user.vip_subscription_expiration > 0 %}
+                                        VIP: {{ format_date(current_user.vip_subscription_expiration) }}
+                                        {% endif %}
+                                        </p>
+
+                                        <p>Last Transaction Date:<strong> {{ last_transaction.transaction_confirmed_date }}</strong></p>
+                                    <p>Your Last Subscription: <strong>{{ last_transaction.subscription_type }}</strong></p>
+                                        {% endif %}
+
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+            </div>
+        </div>
+
+        </main>
+
+        {% block aside %}
+        {% endblock %}
+    </div>
+
+    {% include 'footer.html' %}
+</body>
+{% endblock %}
+
+

@@ -1,0 +1,64 @@
+{% extends 'header.html' %}
+
+{% block body %}
+<body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
+{% include 'sidebar.html' %}
+        <main class="main">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">Home</li>
+                <li class="breadcrumb-item active">Subscription Information</li>
+            </ol>
+            <div class="container-fluid">
+                <div class="animated fadeIn">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <i class="fa fa-align-justify"></i> Subscription Information
+                                </div>
+                                <div class="card-block">
+                                    <table class="table table-bordered table-striped table-condensed">
+                                        <thead>
+                                            <tr>
+                                                <th>Confirmed Date</th>
+                                                <th>Sender Name</th>
+                                                <th>Validity / Qty</th>
+                                                <th>Type</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for i in transaction_list %}
+                                                <tr>
+                                                <td>{{ i.transaction_confirmed_date }}</td>
+                                                <td>{{ i.sender_username }}</td>
+                                                <td>{{ i.qty }}</td>
+                                                <td>
+                                                {% if i.is_credit %}
+                                                    Credits
+                                                {% else %}
+                                                    {{ i.subscription_type }}
+                                                {% endif %}
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    <nav>
+                                        <div class="pagination">
+                                            <ul>
+                                                {% if transaction_list.has_prev %}<li><a href="{{ url_for('manage_trial', page=transaction_list.prev_num) }}">Prev</a></li>{% endif %}
+                                                {% if transaction_list.has_next %}<li><a href="{{ url_for('manage_trial', page=transaction_list.next_num) }}">Next</a></li>{% endif %}
+                                            </ul>
+                                        </div>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                        <!--/col-->
+                </div>
+        </main>
+</div>
+{% include 'footer.html' %}
+
+</body>
+{% endblock %}

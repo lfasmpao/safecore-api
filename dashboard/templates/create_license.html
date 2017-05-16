@@ -1,0 +1,84 @@
+{% extends 'header.html' %}
+
+{% block body %}
+<body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
+{% include 'sidebar.html' %}
+        <main class="main">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">Home</li>
+                <li class="breadcrumb-item">Reseller Management Panel</li>
+                <li class="breadcrumb-item active">Create License</li>
+            </ol>
+        <div class="container-fluid">
+                <div class="animated fadeIn">
+        <div class="row">
+                        <div class="col-sm-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    Generate Licence Key
+                                </div>
+                                <div class="card-block">
+                                    <form action="{{ url_for('api.generate_key') }}" method="post">
+                                        {{ form.hidden_tag() }}
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                            <label for="type">Duration</label>
+                                            {{ form.qty(class="form-control") }}
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="type">Subscription Type</label>
+                                                {{ form.category(class="form-control") }}
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <label for="type">License Key Expiration Date</label>
+                                                <div class='input-group date'>
+                                                {{ form.valid_date(class="form-control datetime") }}
+                                                     <span class="input-group-addon">
+                                                         <span class="icon-calendar"></span>
+                                                     </span>
+                                                 </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    Current Status
+                                </div>
+                                <div class="card-block">
+                                    <p>Credits: {% if credits.credit_count == 0 or credits.credit_count == None %}
+                                        <b>No Credits</b>
+                                        {% else %}
+                                        {{ credits.credit_count }}
+                                        </p>
+                                    {% endif %}
+                                    <p>Last Transaction Date: {{ last_transaction.transaction_confirmed_date }}</p>
+
+                                </div>
+                            </div>
+                        </div>
+        </div>
+        </div>
+        </div>
+        </main>
+
+        {% block aside %}
+        {% endblock %}
+    </div>
+
+    {% include 'footer.html' %}
+</body>
+{% endblock %}
+
+

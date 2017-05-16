@@ -1,0 +1,56 @@
+{% extends 'header.html' %}
+
+{% block body %}
+<body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
+{% include 'sidebar.html' %}
+        <main class="main">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">Home</li>
+                <li class="breadcrumb-item active">Server Status</li>
+            </ol>
+            <div class="container-fluid">
+                <div class="animated fadeIn">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <i class="fa fa-align-justify"></i> Server Status
+                                </div>
+                                <div class="card-block">
+                                    <table class="table table-bordered table-striped table-condensed">
+                                        <thead>
+                                            <tr>
+                                                <th>Server Location</th>
+                                                <th>Server Hostname</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for i in server_list %}
+                                            <tr>
+                                                <td>{{ i.server_location }}</td>
+                                                <td>{{ i.server_ip }}</td>
+                                                <td>{% if i.server_status %}Online{% else %}Offline{% endif %}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    <nav>
+                                        <div class="pagination">
+                                            <ul>
+                                                {% if server_list.has_prev %}<li><a href="{{ url_for('server_status', server_list=server_list.prev_num) }}">Prev</a></li>{% endif %}
+                                                {% if server_list.has_next %}<li><a href="{{ url_for('server_status', server_list=server_list.next_num) }}">Next</a></li>{% endif %}
+                                            </ul>
+                                        </div>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                        <!--/col-->
+                </div>
+        </main>
+</div>
+{% include 'footer.html' %}
+
+</body>
+{% endblock %}
