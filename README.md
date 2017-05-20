@@ -62,6 +62,7 @@ Just commit your code corrections and improvement
 
 By using this code you must agree to this conditions
    - You must not remove the authors name 
+   - Include the AUTHOR name in the footer
 
 License
 ----
