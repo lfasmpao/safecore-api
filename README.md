@@ -11,7 +11,7 @@ OpenVPN User Management System
   - Login and Sign-up System
   - myPage (Referral signup link)
   - mySubscription  (Subscription Sharing)
-  - Reseller Panel (Reselling From)
+  - Reseller Panel
   - System Update Notification
  
 ### Installation
@@ -62,7 +62,6 @@ Just commit your code corrections and improvement
 
 By using this code you must agree to this conditions
    - You must not remove the authors name 
-   -
 
 License
 ----
