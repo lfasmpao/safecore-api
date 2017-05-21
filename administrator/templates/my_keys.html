@@ -2,12 +2,12 @@
 
 {% block body %}
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
-{% include 'sidebar.html' %}
+{% include 'sidebar_administrator.html' %}
         <main class="main">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">Home</li>
                 <li class="breadcrumb-item">Reseller Management Panel</li>
-                <li class="breadcrumb-item active">License Key List</li>
+                <li class="breadcrumb-item active">MyLicense Key List</li>
             </ol>
             <div class="container-fluid">
                 <div class="animated fadeIn">
@@ -23,6 +23,7 @@
                                             <tr>
                                                 <th>Transaction Date</th>
                                                 <th>License Key</th>
+                                                <th>Sender Name</th>
                                                 <th>Receiver Name</th>
                                                 <th>Received Date</th>
                                                 <th>Sender and Receiver IP</th>
@@ -33,10 +34,11 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        {% for i in transaction_list.items %}
+                                        {% for i in user_list.items %}
                                             <tr>
                                                 <td>{{ i.transaction_date }}</td>
                                                 <td>{{ i.license_key }}</td>
+                                                <td>{{ i.sender_username }}</td>
                                                 <td>{{ i.receiver_username }}</td>
                                                 <td>{{ i.transaction_confirmed_date }}</td>
                                                 <td>{{ i.transaction_login_ip }}</td>
@@ -45,15 +47,9 @@
                                                 <td>
                                                     {% if i.confirmed %}Confirmed{% else %}Waiting for confirmation{% endif %}
                                                 </td>
-                                                {% if i.confirmed %}
-                                                    <td>
-                                                        None
-                                                    </td>
-                                                {% else %}
                                                 <td>
                                                     <a href="{{ url_for('api.delete_key', key=i.license_key) }}">Delete</a>
                                                 </td>
-                                                {% endif %}
 
                                             </tr>
                                         {% endfor %}
@@ -61,8 +57,8 @@
                                     </table>
                                     <nav>
                                         <div class="pagination">
-                                                {% if transaction_list.has_prev %}<li><a href="{{ url_for('manage_key', page=transaction_list.prev_num) }}">Prev</a></li>{% endif %}
-                                                {% if transaction_list.has_next %}<li><a href="{{ url_for('manage_key', page=transaction_list.next_num) }}">Next</a></li>{% endif %}
+                                                {% if user_list.has_prev %}<li><a href="{{ url_for('admin_api.mykeys', page=user_list.prev_num) }}">Prev</a></li>{% endif %}
+                                                {% if user_list.has_next %}<li><a href="{{ url_for('admin_api.mykeys', page=user_list.next_num) }}">Next</a></li>{% endif %}
                                         </div>
                                     </nav>
                                 </div>

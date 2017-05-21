@@ -22,15 +22,17 @@
                                             <tr>
                                                 <th>Date</th>
                                                 <th>Information</th>
+                                                <th>Logged IP</th>
                                                 <th>Type</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        {% for i in notification_list %}
+                                        {% for i in notification_list.items %}
                                             <tr>
                                                 <td>{{ i.confirmed_date }}</td>
                                                 <td>{% if i.notification_type == 'login' %}Successfully login to your web panel{% elif i.notification_type == 'signup' %}Someone just signup using your page{% else %}You changed your password{% endif %}</td>
-                                                <td>{{ i.notification_type }}</td>
+                                                <td>{{ i.notification_ip }}</td>
+                                                <td>{% if i.notification_type == 'login' %}Login{% elif i.notification_type == 'signup' %}Signup Referral{% else %}Changed Password{% endif %}</td>
                                             </tr>
                                         {% endfor %}
                                         </tbody>
@@ -38,8 +40,8 @@
                                      <nav>
                                         <div class="pagination">
                                             <ul>
-                                                {% if notification_list.has_prev %}<li><a href="{{ url_for('profile_info', notification_list=notification_list.prev_num) }}">Prev</a></li>{% endif %}
-                                                {% if notification_list.has_next %}<li><a href="{{ url_for('profile_info', notification_list=notification_list.next_num) }}">Next</a></li>{% endif %}
+                                                {% if notification_list.has_prev %}<li><a href="{{ url_for('notifications', page=notification_list.prev_num) }}">Prev</a></li>{% endif %}
+                                                {% if notification_list.has_next %}<li><a href="{{ url_for('notifications', page=notification_list.next_num) }}">Next</a></li>{% endif %}
                                             </ul>
                                         </div>
                                     </nav>

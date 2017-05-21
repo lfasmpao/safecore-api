@@ -1,17 +1,24 @@
 import random
 import string
-from dashboard import app
-from functools import wraps
+from functools import wraps, update_wrapper
 from flask import abort
 from flask_login import current_user
-from datetime import datetime, timedelta
-
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1] in app.config['ALLOWED_EXTENSIONS']
+from dashboard.models import Administrator
+import socket
+import time
+from datetime import datetime
+from flask import make_response
 
 
 def license_key_generator():
+""" Random Key Generation Module
+	AUTHOR: Leo Francisco Simpao lfasmpao@gmail.com
+	This module will generate a random letters from A-Z UTF-8 and produce it to an 29 digits key with '-',
+	Example:
+		license_key_generator()
+	Dependencies:
+		random
+"""
     licence_key = []
     for x in range(5):
         licence_key.append(''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(5)))
@@ -19,23 +26,69 @@ def license_key_generator():
 
 
 def email_key_generator():
+""" Email Key Generation Module
+	AUTHOR: Leo Francisco Simpao lfasmpao@gmail.com
+	This module will generate a random letters from A-Z UTF-8 and produce it to an 24 digits key with '-',
+	Example:
+		email_key_generator()
+	Dependencies:
+		random
+"""
     confirmation_code = []
     for x in range(5):
         confirmation_code.append(''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(4)))
     return "-".join(confirmation_code)
 
 
-def is_reseller(f):
+def admin_only(f):
+	""" Check if the user privilages is Administrator """
     @wraps(f)
     def wrap(*args, **kwargs):
-        if current_user.is_reseller:
+        query = Administrator.query.filter_by(user_id=current_user.id).first()
+        if query is not None:
             return f(*args, **kwargs)
         else:
             abort(404)
     return wrap
 
 
+def is_reseller(f):
+	""" Check if the user privilages is Reseller """
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        query = Administrator.query.filter_by(user_id=current_user.id).first()
+        if query is not None:
+            return f(*args, **kwargs)
+        elif current_user.is_reseller:
+            return f(*args, **kwargs)
+        else:
+            abort(404)
+    return wrap
+
+
+def nocache(view):
+	""" No cache """
+    @wraps(view)
+    def no_cache(*args, **kwargs):
+        response = make_response(view(*args, **kwargs))
+        response.headers['Last-Modified'] = datetime.now()
+        response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
+        response.headers['Pragma'] = 'no-cache'
+        response.headers['Expires'] = '-1'
+        return response
+
+    return update_wrapper(no_cache, view)
+
+
 def dateBack(date, precise=False, fromdate=None):
+""" Dateback Module
+	This module return a value from date to a human readable format
+	Example:
+		dateBack('12-10-2017', False, '12-10-2017')
+		this will return 'now'
+	Dependencies:
+		datetime
+"""
     delta = fromdate - date
     deltaminutes = delta.seconds // 60
     deltahours = delta.seconds // 3600
@@ -64,3 +117,41 @@ def dateBack(date, precise=False, fromdate=None):
         text = " and ".join(text.rsplit(", ", 1))
 
     return text
+
+
+class Management:
+""" Dateback Module
+	AUTHOR: Leo Francisco Simpao lfasmpao@gmail.com
+	This module will send a disconnection command to an openvpn management enabled syste,
+	Example:
+		init = Management() - this will init the class
+		init.send(username, 127.0.0.1, 5555)
+	Dependencies:
+		socket
+"""
+    def __init__(self):
+        self.sock = None
+        self.connected = False
+        self.timeout = 120
+        self.delay = 1
+
+    def send(self, username, ip, port):
+        retval = None
+        try:
+            self.sock = socket.socket()
+            if self.sock:
+                self.sock.settimeout(self.timeout)
+            if self.sock:
+                self.sock.connect((ip, port))
+            self.connected = True
+            count = 0
+            if self.sock:
+                count = self.sock.send('kill %s\n' % username)
+            if count == 0:
+                return None
+            time.sleep(self.delay)
+            if self.sock:
+                retval = self.sock.recv(1024)
+        except socket.timeout, e:
+            return None
+        return retval

@@ -90,22 +90,22 @@
             <div class="col-sm-6">
                             <div class="card">
                                 <div class="card-header">
-                                    <strong>Change Profile Information</strong>
+                                    <strong>Change myPage information</strong>
                                 </div>
                                 <div class="card-block">
-                                    <form action="{{ url_for('api.change_info') }}" method="post">
+                                    <form action="{{ url_for('api.change_mypage') }}" method="post">
                                         {{ form.hidden_tag() }}
                                     <div class="row">
                                         <div class="col-sm-6">
                                             <div class="form-group">
-                                                <label for="trasaction_number">First Name</label>
-                                                {{ form.first_name(placeholder="First Name", class="form-control ") }}
+                                                <label for="trasaction_number">About Me</label>
+                                                {{ form.info(placeholder="Insert your info here", class="form-control ") }}
                                             </div>
                                         </div>
                                             <div class="col-sm-6">
                                             <div class="form-group">
-                                                <label for="trasaction_number">Last Name</label>
-                                                {{ form.last_name(placeholder="Last Name", class="form-control") }}
+                                                <label for="trasaction_number">Payment Methods</label>
+                                                {{ form.payment_method(placeholder="Payment Methods", class="form-control") }}
                                             </div>
                                             </div>
                                     </div>
@@ -117,10 +117,14 @@
                             </div>
                             <div class="card">
                                 <div class="card-header">
-                                    Other Information
+                                    Current Settings
                                 </div>
                                 <div class="card-block">
-
+                                    <p>About Me: {{ query.info }}</p>
+                                    <p>Payment Method: {{ query.payment_method }}</p>
+                                    <p>Facebook URL: {{ query.facebook_url }}</p>
+                                    <p>Twitter URL: {{ query.twitter_url }}</p>
+                                    <p>My Page Url: https://signup.safecorevpn.com/{{ current_user.username }}</p>
                                 </div>
                             </div>
                         </div>
@@ -129,19 +133,19 @@
                         <div class="col-sm-6">
                             <div class="card">
                                 <div class="card-header">
-                                    Change Password
+                                    Profile Urls
                                 </div>
                                 <div class="card-block">
-                                    <form action="{{ url_for('api.update_password') }}" method="post">
+                                    <form action="{{ url_for('api.change_url') }}" method="post">
                                          {{ form.hidden_tag() }}
                                     <div class="row">
                                         <div class="col-sm-6">
-                                            <label for="type">Password</label>
-                                            {{ form1.password(class="form-control") }}
+                                            <label for="type">Facebook URL</label>
+                                            {{ form1.facebook_url(class="form-control") }}
                                         </div>
                                         <div class="col-sm-6">
-                                                <label for="type">Confirm Password</label>
-                                            {{ form1.confirm(class="form-control") }}
+                                                <label for="type">Twitter Url</label>
+                                            {{ form1.twitter_url(class="form-control") }}
                                         </div>
                                     </div>
                                 </div>

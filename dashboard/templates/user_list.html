@@ -1,0 +1,87 @@
+{% extends 'header.html' %}
+
+{% block body %}
+<body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
+{% include 'sidebar.html' %}
+        <main class="main">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">Home</li>
+                <li class="breadcrumb-item active">User Management</li>
+            </ol>
+            <div class="container-fluid">
+                <div class="animated fadeIn">
+                    <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                                <div class="card-header">
+                                    <form class="navbar-form" action="{{ url_for('admin_api.search_user') }}" method="post">
+                                        {{ form.hidden_tag() }}
+            <div class="input-group add-on">
+                {{ form.confirm(class="form-control", placeholder="Search username here...")}}
+                <div class="input-group-btn">
+                    <button class="btn btn-default" type="submit"><i class="icon-location-pin"></i></button>
+                </div>
+            </div>
+        </form>
+                                </div>
+                        </div>
+
+                    </div>
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <i class="fa fa-align-justify"></i> User List
+                                </div>
+                                <div class="card-block">
+                                    <table class="table table-bordered table-striped table-condensed">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Email</th>
+                                                <th>Username</th>
+                                                <th>Joined Date</th>
+                                                <th>Type</th>
+                                                <th>VIP Duration</th>
+                                                <th>Premium Duration</th>
+                                                <th>Connection Status</th>
+                                                <th>Login IP</th>
+                                                <th>Options</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for i in user_list.items %}
+                                            <tr>
+                                                <td>{{ i.first_name + ' ' + i.last_name }}</td>
+                                                <td>{{ i.email }}</td>
+                                                <td>{{ i.username }}</td>
+                                                <td>{{ i.registered_date }}</td>
+                                                <td>{{ i.privilage_level }}</td>
+                                                <td>{{ format_date(i.vip_subscription_expiration) }}</td>
+                                                <td>{{ format_date(i.premium_subscription_expiration) }}</td>
+                                                <td>{% if i.connection_status >= 1 %}Disconnected{% else %} Connected{% endif %}</td>
+                                                <td>{{ i.last_login_ip }}</td>
+                                                <td>
+                                                    <a href="{{ url_for('api.reset_user_reseller', username=i.username) }}">Reset</a>
+                                                    <a href="{{ url_for('api.delete_user_reseller', username=i.username) }}">Delete</a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    <nav>
+                                        <div class="pagination">
+                                                {% if user_list.has_prev %}<li><a href="{{ url_for('admin_api.users', page=user_list.prev_num) }}">Prev</a></li>{% endif %}
+                                                {% if user_list.has_next %}<li><a href="{{ url_for('admin_api.users', page=user_list.next_num) }}">Next</a></li>{% endif %}
+                                        </div>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                        <!--/col-->
+                </div>
+        </main>
+</div>
+{% include 'footer.html' %}
+
+</body>
+{% endblock %}

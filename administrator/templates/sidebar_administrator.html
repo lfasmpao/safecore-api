@@ -1,0 +1,150 @@
+{% block body %}
+<header class="app-header navbar">
+        <button class="navbar-toggler mobile-sidebar-toggler d-lg-none" type="button">☰</button>
+        <a class="navbar-brand" href="{{ url_for('admin_api.management') }}"></a>
+        <ul class="nav navbar-nav d-md-down-none">
+            <li class="nav-item">
+                <a class="nav-link navbar-toggler sidebar-toggler" href="#">☰</a>
+            </li>
+            <li class="nav-item px-3">
+                <a class="nav-link" href="{{ url_for('home') }}">Dashboard</a>
+            </li>
+            <li class="nav-item px-3">
+                <a class="nav-link" href="{{ url_for('admin_api.users') }}">Users</a>
+            </li>
+            <li class="nav-item px-3">
+                <a class="nav-link" href="{{ url_for('account_settings') }}">Settings</a>
+            </li>
+        </ul>
+        <ul class="nav navbar-nav ml-auto">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                    <img src="{{ url_for('static', filename='img/profile_pictures/%s.jpg' % user_info.username) }}" class="img-avatar">
+                    <span class="d-md-down-none">{{ name }}</span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <div class="dropdown-header text-center">
+                        <strong>Account</strong>
+                    </div>
+                    <a class="dropdown-item" href="{{ url_for('notifications') }}"><i class="fa fa-bell-o"></i> Notifications<span class="badge badge-info">42</span></a>
+
+                    <div class="dropdown-header text-center">
+                        <strong>Settings</strong>
+                    </div>
+                    <a class="dropdown-item" href="{{ url_for('account_settings') }}"><i class="fa fa-user"></i> Settings</a>
+                    <div class="divider"></div>
+                    <a class="dropdown-item" href="{{ url_for('admin_api.logout') }}"><i class="fa fa-lock"></i> Logout</a>
+                </div>
+            </li>
+            <li class="nav-item d-md-down-none">
+                <a class="nav-link navbar-toggler aside-menu-toggler" href="#">☰</a>
+            </li>
+        </ul>
+    </header>
+
+    <div class="app-body">
+        <div class="sidebar">
+            <nav class="sidebar-nav">
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('admin_api.management') }}"><i class="icon-speedometer"></i> Generate License Key</a>
+                    </li>
+                    <li class="nav-title">
+                        Profile
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('admin_api.make_reseller') }}"><i class="icon-user"></i> Reseller Management</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('admin_api.users') }}"><i class="icon-user"></i> User Management</a>
+                    </li>
+                        <li class="nav-item nav-dropdown">
+                        <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-key"></i> Manage License</a>
+                        <ul class="nav-dropdown-items">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('admin_api.mykeys') }}"><i class="icon-credit-card"></i> My License</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('admin_api.license_list') }}"><i class="icon-credit-card"></i> Reseller Keys</a>
+                            </li>
+                        </ul>
+                        </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('server_status') }}"><i class="icon-calculator"></i> Server Status <span class="badge badge-info">NEW</span></a>
+                    </li>
+                    </li>
+                    
+                </ul>
+            </nav>
+        </div>
+{% endblock %}
+
+{% block aside %}
+
+        <aside class="aside-menu">
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#timeline" role="tab"><i class="icon-list"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#settings" role="tab"><i class="icon-settings"></i></a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="timeline" role="tabpanel">
+                    <div class="callout m-0 py-2 text-muted text-center bg-faded text-uppercase">
+                        <small><b>SafeCore Updates</b>
+                        </small>
+                    </div>
+                    {% for i in updates %}
+                    <hr class="transparent mx-3 my-0">
+                    <div class="callout {% if i.is_don %} callout-success {% elif i.maintenance_level == 1  %} callout-info {% else %} callout-warning {% endif %} m-0 py-3">
+                        <div><strong>{{ i.title }}</strong></div>
+                        <div>{{ i.info }}</div>
+                        <small class="text-muted mr-3"><i class="icon-calendar"></i>&nbsp; {{ i.scheduled_date }}</small>
+                        <small class="text-muted"><i class="icon-people"></i>&nbsp; {{ i.conducted_by }}</small>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="tab-pane p-3" id="settings" role="tabpanel">
+                    <h6>Server Status</h6>
+
+                    <div class="text-uppercase mb-1 mt-4">
+                        <small><b>CPU Usage</b>
+                        </small>
+                    </div>
+                    <div class="progress progress-xs">
+                        <div class="progress-bar bg-info" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <small class="text-muted">348 Processes. 1/4 Cores.</small>
+
+                    <div class="text-uppercase mb-1 mt-2">
+                        <small><b>Memory Usage</b>
+                        </small>
+                    </div>
+                    <div class="progress progress-xs">
+                        <div class="progress-bar bg-warning" role="progressbar" style="width: 70%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <small class="text-muted">10GB/16GB</small>
+
+                    <div class="text-uppercase mb-1 mt-2">
+                        <small><b>SSD 1 Usage</b>
+                        </small>
+                    </div>
+                    <div class="progress progress-xs">
+                        <div class="progress-bar bg-danger" role="progressbar" style="width: 95%" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <small class="text-muted">243GB/256GB</small>
+
+                    <div class="text-uppercase mb-1 mt-2">
+                        <small><b>SSD 2 Usage</b>
+                        </small>
+                    </div>
+                    <div class="progress progress-xs">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: 10%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <small class="text-muted">25GB/256GB</small>
+                </div>
+            </div>
+        </aside>
+{% endblock %}

@@ -18,29 +18,36 @@ class User(db.Model):
     is_reseller = db.Column('is_reseller', db.Boolean, nullable=False)
     privilage_level = db.Column('privilage_level', db.Enum('normal', 'subscribed'), nullable=False)
     password = db.Column('password', db.String(120), nullable=False)
+    registered_date = db.Column('registered_date', db.DateTime(), nullable=False)
     login_date = db.Column('last_login_date', db.DateTime(), nullable=False)
     login_ip = db.Column('last_login_ip', db.String(39), nullable=False)
     authenticated = db.Column('online_status', db.Boolean, default=False)
     account_status = db.Column('account_status', db.Enum('active',  'disabled',  'banned'), nullable=False)
-    connection_status = db.Column('connection_status', db.Integer, default=0)
+    connection_status = db.Column('connection_status', db.Integer, default=1)
+    connected_server_ip = db.Column('connected_server_ip', db.String(39), nullable=False)
+    under_by = db.Column('under_by', db.String(120), nullable=True)
     requests = db.relationship('Requests', backref='user', lazy='dynamic')
+    administrator = db.relationship('Administrator', backref='user', lazy='dynamic')
     profile_info = db.relationship('ProfileInfo', backref='user', lazy='dynamic')
     email_verification = db.relationship('Email', backref='user', lazy='dynamic')
+    reseller = db.relationship('Reseller', backref='user', lazy='dynamic')
     trial_account = db.relationship('TrialUser', backref='user', lazy='dynamic')
 
-    def __init__(self, first_name, last_name, email, username, password):
+    def __init__(self, first_name, last_name, email, username, password, under_by=None):
+        self.under_by = under_by
         self.email = email
-        self.first_name = first_name
-        self.last_name = last_name
+        self.first_name = first_name.title()
+        self.last_name = last_name.title()
         self.username = username
         self.account_status = 'active'
         self.is_reseller = False
+        self.registered_date = datetime.now()
         check_password_hashed = password + app.config['PASSWORD_SALT']
         self.password = (hashlib.md5(check_password_hashed.encode())).hexdigest()
         self.premium_subscription_expiration = 0
         self.vip_subscription_expiration = 0
         self.email_confirmation = False
-        self.connection_status = 0
+        self.connection_status = 1
         self.login_ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
         self.login_date = datetime.now()
         self.privilage_level = 'normal'
@@ -108,6 +115,7 @@ class Notifications(db.Model):
     id = db.Column('id', db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column('user_id', db.Integer, db.ForeignKey('users.user_id'))
     notification_type = db.Column('notification_type', db.Enum('login', 'signup', 'change_password'), nullable=False)
+    notification_ip = db.Column('notification_ip', db.String(39), nullable=False)
     confirmed_date = db.Column('confirmed_date', db.DATETIME, nullable=False)
 
 
@@ -117,5 +125,15 @@ class Reseller(db.Model):
     user_id = db.Column('user_id', db.Integer, db.ForeignKey('users.user_id'))
     credit_count = db.Column('credit_count', db.Integer, nullable=False)
     trial_generation_count = db.Column('trial_generation_count', db.Integer, nullable=False)
-    last_transaction_date = db.Column('last_transaction_date', db.Integer, nullable=False)
-    last_transaction_ip = db.Column('last_transaction_ip', db.Text, nullable=False)
+    last_transaction_date = db.Column('last_transaction_date',db.DateTime, nullable=True)
+    last_transaction_ip = db.Column('last_transaction_ip', db.Text, nullable=True)
+
+
+class Administrator(db.Model):
+    __tablename__ = 'administrators'
+    id = db.Column('id', db.Integer, primary_key=True,  autoincrement=True)
+    user_id = db.Column('user_id', db.Integer, db.ForeignKey('users.user_id'))
+    login_date = db.Column('last_login_date', db.DateTime, nullable=True)
+    login_ip = db.Column('last_login_ip', db.String(39), nullable=True)
+    last_transaction_date = db.Column('last_transaction_date', db.DateTime, nullable=True)
+    last_transaction_ip = db.Column('last_transaction_ip', db.Text, nullable=True)

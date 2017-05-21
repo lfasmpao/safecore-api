@@ -2,20 +2,6 @@
 <header class="app-header navbar">
         <button class="navbar-toggler mobile-sidebar-toggler d-lg-none" type="button">☰</button>
         <a class="navbar-brand" href="{{ url_for('home') }}"></a>
-        <ul class="nav navbar-nav d-md-down-none">
-            <li class="nav-item">
-                <a class="nav-link navbar-toggler sidebar-toggler" href="#">☰</a>
-            </li>
-            <li class="nav-item px-3">
-                <a class="nav-link" href="#">Dashboard</a>
-            </li>
-            <li class="nav-item px-3">
-                <a class="nav-link" href="#">Users</a>
-            </li>
-            <li class="nav-item px-3">
-                <a class="nav-link" href="#">Settings</a>
-            </li>
-        </ul>
         <ul class="nav navbar-nav ml-auto">
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
@@ -26,15 +12,18 @@
                     <div class="dropdown-header text-center">
                         <strong>Account</strong>
                     </div>
-                    <a class="dropdown-item" href="{{ url_for('notifications') }}"><i class="fa fa-bell-o"></i> Notifications<span class="badge badge-info">42</span></a>
+                    <a class="dropdown-item" href="{{ url_for('notifications') }}"><i class="fa fa-bell-o"></i> Notifications</a>
 
                     <div class="dropdown-header text-center">
                         <strong>Settings</strong>
                     </div>
                     <a class="dropdown-item" href="{{ url_for('account_settings') }}"><i class="fa fa-user"></i> Settings</a>
-                    <a class="dropdown-item" href="{{ url_for('account_credits') }}"><i class="fa fa-usd"></i> Credits<span class="badge badge-default">42</span></a>
-                    <a class="dropdown-item" href="{{ url_for('profile_info') }}"><i class="fa fa-file"></i> Logs<span class="badge badge-primary">42</span></a>
+                    {% if current_user.is_reseller %}
+                    <a class="dropdown-item" href="{{ url_for('account_credits') }}"><i class="fa fa-usd"></i> Credits</a>
+                    {% endif %}
+                    <a class="dropdown-item" href="{{ url_for('profile_info') }}"><i class="fa fa-file"></i> Logs</a>
                     <div class="divider"></div>
+                    <a class="dropdown-item" href="{{ url_for('reset_account') }}"><i class="fa fa-recycle"></i> Reset Account</a>
                     <a class="dropdown-item" href="{{ url_for('lock_account') }}"><i class="fa fa-shield"></i> Lock Account</a>
                     <a class="dropdown-item" href="{{ url_for('logout') }}"><i class="fa fa-lock"></i> Logout</a>
                 </div>
@@ -64,6 +53,19 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('server_status') }}"><i class="icon-calculator"></i> Server Status <span class="badge badge-info">NEW</span></a>
                     </li>
+                    {% if current_user.under_by is none %}
+                    <li class="nav-item nav-dropdown">
+                        <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-user-follow"></i> mySubscription</a>
+                        <ul class="nav-dropdown-items">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('share_license') }}"><i class="icon-credit-card"></i> Share Subscription</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('share_license_list') }}"><i class="icon-credit-card"></i> Manage myKeys</a>
+                            </li>
+                        </ul>
+                        </li>
+                    {% endif %}
                     {% if current_user.is_reseller %}
                     <li class="nav-title">
                         Reseller Management Panel
@@ -80,6 +82,21 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ url_for('manage_key') }}"><i class="icon-credit-card"></i> License Management</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('mypage_settings') }}"><i class="icon-credit-card"></i> MyPage Settings</a>
+                            </li>
+                        <li class="nav-item nav-dropdown">
+                        <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-user-follow"></i> User Management</a>
+                        <ul class="nav-dropdown-items">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('create_user') }}"><i class="icon-credit-card"></i> Create User</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('manage_users') }}"><i class="icon-credit-card"></i> Manage Users</a>
+                            </li>
+                        </ul>
+                        </li>
+
                         <li class="nav-item nav-dropdown">
                         <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-user-follow"></i> Manage Credit</a>
                         <ul class="nav-dropdown-items">
@@ -99,13 +116,13 @@
                         <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-cloud-download"></i> Download</a>
                         <ul class="nav-dropdown-items">
                             <li class="nav-item">
-                                <a class="nav-link" href="icons-font-awesome.html"><i class="icon-star"></i> Windows App</a>
+                                <a class="nav-link" href="https://www.mediafire.com/?41ba4886aiwttp6"><i class="icon-star"></i> Windows App</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="icons-simple-line-icons.html"><i class="icon-star"></i> Android App</a>
+                                <a class="nav-link" href="https://www.mediafire.com/?p61ki2opza15kt4"><i class="icon-star"></i> Android App</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="icons-simple-line-icons.html"><i class="icon-star"></i> Configuration Files</a>
+                                <a class="nav-link" href="https://www.mediafire.com/?5pthqpsv6jy8kku"><i class="icon-star"></i> Configuration Files</a>
                             </li>
                         </ul>
                     </li>

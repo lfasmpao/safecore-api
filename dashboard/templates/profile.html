@@ -27,7 +27,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {% for i in transaction_list %}
+                                            {% for i in transaction_list.items %}
                                                 <tr>
                                                 <td>{{ i.transaction_confirmed_date }}</td>
                                                 <td>{{ i.sender_username }}</td>

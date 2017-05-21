@@ -1,0 +1,1 @@
+Replace home.html contents by your html code for your home page

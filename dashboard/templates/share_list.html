@@ -29,7 +29,6 @@
                                                 <th>Type</th>
                                                 <th>Validity / Qty</th>
                                                 <th>Status</th>
-                                                <th>Options</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -50,9 +49,6 @@
                                                         None
                                                     </td>
                                                 {% else %}
-                                                <td>
-                                                    <a href="{{ url_for('api.delete_key', key=i.license_key) }}">Delete</a>
-                                                </td>
                                                 {% endif %}
 
                                             </tr>

@@ -8,7 +8,7 @@
                 <li class="breadcrumb-item">Home</li>
                 <li class="breadcrumb-item active">Dashboard</li>
             </ol>
-            <div class="cover_photo" style="background: url({{ url_for('static', filename='img/cover_photos/%s.png' % user_info.username) }}) no-repeat center center;">
+            <div class="cover_photo" style="background: url({{ url_for('static', filename='img/cover_photos/%s.jpg' % user_info.username) }}) no-repeat center center;">
                 <div class="logo-wrapper">
                     <img class="img-responsive profile-picture img-circle" src="{{ url_for('static', filename='img/profile_pictures/%s.jpg' % user_info.username) }}" />
                     <div class="col-sm-12 center-block">
@@ -22,7 +22,6 @@
                                             <a class="dropdown-item" href="{{ url_for('upload_cover') }}">Change Cover Photo</a>
                                         </div>
                                     </div></h1>
-
                     </div>
                         <h4 class="profile-details">
                             {% if user_info.privilage_level == 'normal' %}
@@ -54,8 +53,8 @@
                             <div class="col-sm-6 col-lg-3">
                             <div class="card card-inverse card-primary">
                                 <div class="card-block pb-0">
-                                    <h5>View our list of reseller</h5>
-                                    <a href="{{ url_for('manage_license') }}" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> Click here!</a>
+                                    <h5>Visit our Facebook group</h5>
+                                    <a href="https://www.facebook.com/groups/safecorevpn" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> Click here!</a>
                                 </div>
                                 <div class="chart-wrapper px-3" style="height:70px;">
                                     <canvas id="card-chart1" class="chart" height="70"></canvas>
@@ -79,7 +78,7 @@
                             <div class="card card-inverse card-primary">
                                 <div class="card-block pb-0">
                                     <h4 class="mb-0">
-                                        {% if connection_status %}
+                                        {% if current_user.connection_status == 0 %}
                                             Connected
                                         {% else %}
                                             Disconnected
@@ -124,7 +123,7 @@
                         <div class="col-sm-6 col-lg-3">
                             <div class="card card-inverse card-danger">
                                 <div class="card-block pb-0">
-                                    <h4 class="mb-0">2</h4>
+                                    <h4 class="mb-0">{{ server_count }}</h4>
                                     <p>Servers Online</p>
                                 </div>
                                 <div class="chart-wrapper px-3" style="height:70px;">

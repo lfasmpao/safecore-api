@@ -1,8 +1,9 @@
 from flask_wtf import FlaskForm
 from . import app
-from wtforms import StringField, PasswordField, FileField, SelectField, DateField
-from wtforms.validators import DataRequired, Length, Email, EqualTo, Optional
+from wtforms import StringField, PasswordField, SelectField, DateField, IntegerField
+from wtforms.validators import DataRequired, Length, Email, EqualTo, Optional, NumberRange
 from wtfrecaptcha.fields import RecaptchaField
+from flask_wtf.file import FileField, FileAllowed, FileRequired
 
 
 class LoginForm(FlaskForm):
@@ -26,12 +27,17 @@ class RegistrationForm(FlaskForm):
 
 class LicenseKeyForm(FlaskForm):
     category = SelectField('Category', choices=[(1, 'Premium'), (2, 'VIP')], coerce=int)
-    license_key = StringField('License Key', validators=[DataRequired(), Length(min=28, max=29)])
+    license_key = StringField('License Key', validators=[DataRequired(), Length(min=29, max=29)])
+    username = StringField('Sender Username', validators=[DataRequired(), Length(min=4, max=40)])
+
+
+class CreditKeyForm(FlaskForm):
+    license_key = StringField('License Key', validators=[DataRequired(), Length(min=29, max=29)])
     username = StringField('Sender Username', validators=[DataRequired(), Length(min=4, max=40)])
 
 
 class ImageUpload(FlaskForm):
-    upload = FileField('Image Upload', validators=[DataRequired()])
+    upload = FileField('Image Upload', validators=[FileRequired(), FileAllowed(['jpg', 'png'], 'Images only!')])
 
 
 class BuyLicense(FlaskForm):
@@ -49,13 +55,28 @@ class ShareCredits(FlaskForm):
     qty = SelectField('Credits', choices=[(1, '10'), (2, '20'), (3, '25')], coerce=int)
 
 
-class ActivateCredits(FlaskForm):
-    license_key = StringField('License Key', validators=[DataRequired(), Length(min=28, max=29)])
-    username = StringField('Sender Username', validators=[DataRequired(), Length(min=4, max=40)])
+class ShareKey(FlaskForm):
+    category = SelectField('Category', choices=[(1, 'Premium'), (2, 'VIP')], coerce=int)
+    qty = IntegerField('Qty', validators=[DataRequired(), NumberRange(min=1, max=100)])
+    valid_date = DateField('Expiration Date', format='%d/%m/%Y', validators=(DataRequired(),))
+
+
+class GenerateCredits(FlaskForm):
+    qty = IntegerField('Credits', validators=[DataRequired(), NumberRange(min=1, max=100)])
 
 
 class TrialForm(FlaskForm):
     password = StringField('Password', validators=[DataRequired(), Length(min=6, max=29)])
+
+
+class MyPage(FlaskForm):
+    facebook_url = StringField('Facebook', validators=[DataRequired(), Length(min=6, max=29)])
+    twitter_url = StringField('Twitter', validators=[Optional(), Length(min=6, max=29)])
+
+
+class MyPageInfo(FlaskForm):
+    info = StringField('Information', validators=[DataRequired()])
+    payment_method = StringField('Payment Method', validators=[DataRequired()])
 
 
 class ChangePassword(FlaskForm):
@@ -67,7 +88,7 @@ class ChangePassword(FlaskForm):
 
 
 class LockAccount(FlaskForm):
-    confirm = StringField('Confirm', validators=[DataRequired(), Length(min=3, max=3)])
+    confirm = StringField('Confirm', validators=[DataRequired(), Length(min=3, max=50)])
 
 
 class ProfileSettings(FlaskForm):

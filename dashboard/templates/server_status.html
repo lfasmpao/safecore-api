@@ -26,7 +26,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        {% for i in server_list %}
+                                        {% for i in server_list.items %}
                                             <tr>
                                                 <td>{{ i.server_location }}</td>
                                                 <td>{{ i.server_ip }}</td>

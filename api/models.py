@@ -6,6 +6,7 @@ import string
 import random
 from flask_login import current_user
 
+
 class Transactions(db.Model):
     __tablename__ = 'transactions'
     id = db.Column('id', db.Integer, primary_key=True,  autoincrement=True)
@@ -38,12 +39,12 @@ class Requests(db.Model):
     __tablename__ = 'requests'
     id = db.Column('id', db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column('sender_id', db.Integer, db.ForeignKey('users.user_id'))
-    request_type = db.Column('request_type', db.Enum('vip', 'premium'), nullable=False)
+    request_type = db.Column('request_type', db.Enum('VIP', 'Premium'), nullable=False)
     request_qty = db.Column('request_qty', db.Integer, nullable=False)
     request_date = db.Column('request_date', db.DATETIME, nullable=False)
-    confirmed = db.Column('confirmed', db.BOOLEAN, nullable=False)
-    confirmed_by = db.Column('confirmed_by', db.String(120), nullable=False)
-    confirmed_date = db.Column('confirmed_date', db.DATETIME, nullable=False)
+    confirmed = db.Column('confirmed', db.BOOLEAN, nullable=True)
+    confirmed_by = db.Column('confirmed_by', db.String(120), nullable=True)
+    confirmed_date = db.Column('confirmed_date', db.DATETIME, nullable=True)
 
 
 class TrialUser(db.Model):

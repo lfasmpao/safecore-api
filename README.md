@@ -1,12 +1,18 @@
 # SafeCore Web API
+### Version
+1.1
 
-OpenVPN User Management system
+OpenVPN User Management System
 
 # Features!
   - User Management
   - Administration Panel
   - Fully Functional Mailing System
   - Login and Sign-up System
+  - myPage (Referral signup link)
+  - mySubscription  (Subscription Sharing)
+  - Reseller Panel (Reselling From)
+  - System Update Notification
  
 ### Installation
 
@@ -14,6 +20,19 @@ Our Web API requires [Python](http://python.org/) v2.7+ to run.
 
 Install the dependencies and configure "app_config.py" and start the server.
 
+Installing Dependencies
+
+Linux:
+```sh
+$ apt-get install python-pip
+$ pip install -r requirements.txt
+```
+
+Windows:
+```sh
+```
+
+Run:
 ```sh
 $ cd safecore-api
 $ python migrate.py
@@ -38,11 +57,11 @@ Our Web API is currently extended with the following plugins. Instructions on ho
 Want to contribute? Great!
 Just commit your code corrections and improvement
 
+### Conditions
 
-### Todos
-
- - Administration Panel
- - Profile Upload
+By using this code you must agree to this conditions
+   - You must not remove the authors name 
+   -
 
 License
 ----

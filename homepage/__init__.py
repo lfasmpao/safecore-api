@@ -1,7 +1,7 @@
 from flask import Blueprint
 
-admin_api = Blueprint(
-    'admin_api',
+homepage = Blueprint(
+    'homepage',
     __name__,
     template_folder='./templates',
 )

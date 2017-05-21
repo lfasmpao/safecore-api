@@ -30,7 +30,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        {% for i in transaction_list %}
+                                        {% for i in transaction_list.items %}
                                             <tr>
                                                 <td>{{ i.trial_login }}</td>
                                                 <td>{{ i.trial_password }}</td>
@@ -45,8 +45,8 @@
                                  <nav>
                                         <div class="pagination">
                                             <ul>
-                                                {% if transaction_list.has_prev %}<li><a href="{{ url_for('profile_info', transaction_list=transaction_list.prev_num) }}">Prev</a></li>{% endif %}
-                                                {% if transaction_list.has_next %}<li><a href="{{ url_for('profile_info', transaction_list=transaction_list.next_num) }}">Next</a></li>{% endif %}
+                                                {% if transaction_list.has_prev %}<li><a href="{{ url_for('manage_trial', page=transaction_list.prev_num) }}">Prev</a></li>{% endif %}
+                                                {% if transaction_list.has_next %}<li><a href="{{ url_for('manage_trial', page=transaction_list.next_num) }}">Next</a></li>{% endif %}
                                             </ul>
                                         </div>
                                     </nav>
