@@ -30,6 +30,7 @@ $ pip install -r requirements.txt
 
 Windows:
 ```sh
+$ python -m pip install -r requirements-win.txt
 ```
 
 Run:
