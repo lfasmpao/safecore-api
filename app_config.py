@@ -6,10 +6,6 @@ BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 SERVER_NAME = '' # server name 'example.com'
 
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
-
-UPLOAD_FOLDER = BASE_DIR + '/uploads'
-MAX_CONTENT_PATH = 2097152
 THREADS_PER_PAGE = 2
 CONTENT_PER_PAGE = 10
 CSRF_ENABLED = True
