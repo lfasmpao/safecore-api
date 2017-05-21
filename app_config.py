@@ -1,6 +1,6 @@
 import os
 
-API_VERSION = '1.0'
+API_VERSION = '1.0.1'
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 

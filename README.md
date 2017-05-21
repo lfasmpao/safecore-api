@@ -1,6 +1,6 @@
 # SafeCore Web API
 ### Version
-1.1
+1.0.1
 
 OpenVPN User Management System
 
